@@ -1,4 +1,4 @@
-package main
+package eval
 
 import (
 	"fmt"
@@ -18,9 +18,9 @@ func TestEval(t *testing.T) {
 		{"5 / 9 * (F - 32)", Env{"F": -40}, "-40"},
 		{"5 / 9 * (F - 32)", Env{"F": 32}, "0"},
 		{"5 / 9 * (F - 32)", Env{"F": 212}, "100"},
-
 		{"-1 + -x", Env{"x": 1}, "-2"},
 		{"-1 - x", Env{"x": 1}, "-2"},
+		{"{pow(x, 3) + pow(y, 3), sqrt(A / pi)}", Env{"x": 12, "y": 1, "A": 87616, "pi": math.Pi}, "167"},
 	}
 	var prevExpr string
 	for _, test := range tests {

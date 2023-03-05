@@ -1,4 +1,4 @@
-package main
+package eval
 
 type Expr interface {
 	Eval(env Env) float64
@@ -22,4 +22,8 @@ type binary struct {
 type call struct {
 	function string
 	args     []Expr
+}
+
+type min struct {
+	args []Expr
 }

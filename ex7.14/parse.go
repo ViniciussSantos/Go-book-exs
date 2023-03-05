@@ -1,4 +1,4 @@
-package main
+package eval
 
 import (
 	"fmt"
@@ -106,6 +106,7 @@ func parseUnary(lex *lexer) Expr {
 //	| '(' expr ')'
 func parsePrimary(lex *lexer) Expr {
 	switch lex.token {
+
 	case scanner.Ident:
 		id := lex.text()
 		lex.next() // consume Ident
@@ -147,7 +148,28 @@ func parsePrimary(lex *lexer) Expr {
 		}
 		lex.next() // consume ')'
 		return e
+
+	case '{':
+		lex.next() // consume '{'
+		var args []Expr
+		if lex.token != '}' {
+			for {
+				args = append(args, parseExpr(lex))
+				if lex.token != ',' {
+					break
+				}
+				lex.next() // consume ','
+			}
+			if lex.token != '}' {
+				msg := fmt.Sprintf("got %q, want '}'", lex.token)
+				panic(lexPanic(msg))
+			}
+		}
+		lex.next() // consume '}'
+		return min{args}
+
 	}
+
 	msg := fmt.Sprintf("unexpected %s", lex.describe())
 	panic(lexPanic(msg))
 }

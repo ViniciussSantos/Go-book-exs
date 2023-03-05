@@ -1,4 +1,4 @@
-package main
+package eval
 
 import (
 	"fmt"
@@ -44,6 +44,16 @@ func (c call) Check(vars map[Var]bool) error {
 	}
 	for _, arg := range c.args {
 		if err := arg.Check(vars); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (m min) Check(vars map[Var]bool) error {
+
+	for _, v := range m.args {
+		if err := v.Check(vars); err != nil {
 			return err
 		}
 	}
